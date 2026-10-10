@@ -71,7 +71,7 @@
     <div id="app">
       <div id="info">
         <h1>Untinted Bolt + Handle</h1>
-        <p><strong>Loaded from source OBJ</strong> with the tint removed and handle added.</p>
+        <p><strong>Style match</strong> to the other bolt parts.</p>
       </div>
     </div>
 
@@ -92,7 +92,7 @@
       renderer.setPixelRatio(1);
       renderer.setSize(window.innerWidth, window.innerHeight);
       renderer.outputColorSpace = THREE.SRGBColorSpace;
-      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.enabled = false;
       app.appendChild(renderer.domElement);
 
       const controls = new OrbitControls(camera, renderer.domElement);
@@ -102,39 +102,35 @@
       controls.minDistance = 1.2;
       controls.maxDistance = 12;
 
-      const ambient = new THREE.HemisphereLight(0xffffff, 0x1b2233, 1.3);
+      const ambient = new THREE.HemisphereLight(0xffffff, 0x1b2233, 1.0);
       scene.add(ambient);
 
-      const keyLight = new THREE.DirectionalLight(0xffffff, 1.4);
+      const keyLight = new THREE.DirectionalLight(0xffffff, 1.15);
       keyLight.position.set(4, 5, 5);
-      keyLight.castShadow = true;
       scene.add(keyLight);
 
-      const fillLight = new THREE.DirectionalLight(0x7cc9ff, 0.7);
+      const fillLight = new THREE.DirectionalLight(0x7cc9ff, 0.55);
       fillLight.position.set(-4, 2, -3);
       scene.add(fillLight);
 
       const floor = new THREE.Mesh(
-        new THREE.CircleGeometry(4, 96),
-        new THREE.MeshStandardMaterial({
+        new THREE.CircleGeometry(4, 48),
+        new THREE.MeshLambertMaterial({
           color: 0x1b2332,
-          roughness: 0.85,
-          metalness: 0.15,
+          flatShading: true,
         })
       );
       floor.rotation.x = -Math.PI / 2;
       floor.position.y = -1.2;
-      floor.receiveShadow = true;
       scene.add(floor);
 
-      const handleMaterial = new THREE.MeshStandardMaterial({
+      const handleMaterial = new THREE.MeshLambertMaterial({
         color: 0xffffff,
-        roughness: 0.7,
-        metalness: 0.2,
+        flatShading: true,
       });
 
       const handle = new THREE.Mesh(
-        new THREE.TorusGeometry(0.52, 0.09, 24, 120),
+        new THREE.TorusGeometry(0.52, 0.09, 8, 28),
         handleMaterial
       );
       handle.rotation.y = Math.PI / 2;
@@ -142,7 +138,7 @@
       scene.add(handle);
 
       const handleStem = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.12, 0.12, 0.9, 32),
+        new THREE.CylinderGeometry(0.12, 0.12, 0.9, 10),
         handleMaterial
       );
       handleStem.rotation.z = Math.PI / 2;
@@ -164,13 +160,10 @@
 
         obj.traverse((child) => {
           if (child.isMesh) {
-            child.material = new THREE.MeshStandardMaterial({
+            child.material = new THREE.MeshLambertMaterial({
               color: 0xffffff,
-              roughness: 0.75,
-              metalness: 0.15,
+              flatShading: true,
             });
-            child.castShadow = true;
-            child.receiveShadow = true;
           }
         });
 
