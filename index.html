@@ -28,7 +28,7 @@
 </head>
 <body>
     <div id="info">
-        <h3 style="margin: 0 0 5px 0;">Untinted Bolt</h3>
+        <h3 style="margin: 0 0 5px 0;">Untinted Bolt (Full Model)</h3>
         <p style="margin: 0;">Drag to rotate • Scroll to zoom</p>
     </div>
 
@@ -63,7 +63,7 @@
             const response = await fetch(url);
             let text = await response.text();
 
-            // Only change: replace tint color with white
+            // Only change: replace tint color with white (keeps handle and back part)
             text = text.replace(/0\.9300 0\.8500 0\.7000/g, '1.0 1.0 1.0');
 
             const obj = loader.parse(text);
@@ -77,7 +77,10 @@
             controls.update();
         }
 
-        loadUntintedBolt();
+        loadUntintedBolt().catch(err => {
+            console.error('Failed to load model:', err);
+            document.getElementById('info').innerHTML = '<p style="color: red;">Error loading model</p>';
+        });
 
         function animate() {
             requestAnimationFrame(animate);
